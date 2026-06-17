@@ -1,0 +1,281 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 220rpx;
+}
+
+.snapshot {
+  width: 100%;
+  height: 420rpx;
+  background: $color-bg-hover;
+}
+
+.snapshotImg {
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  padding: 0 $page-padding;
+  margin-top: -$spacing-xl;
+  position: relative;
+}
+
+.headerCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-float;
+  margin-bottom: $spacing-md;
+}
+
+.headerTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.areaInfo {
+  flex: 1;
+  margin-right: $spacing-md;
+}
+
+.areaName {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.tagsRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.statusBadge {
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-button;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+}
+
+.statusPending {
+  background: $color-bg-tag-orange;
+  color: $color-warning;
+}
+
+.statusProcessing {
+  background: $color-bg-tag-blue;
+  color: $color-primary;
+}
+
+.statusResolved {
+  background: $color-bg-tag-green;
+  color: $color-success;
+}
+
+.infoGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-lg 0;
+  padding-top: $spacing-md;
+  border-top: 2rpx solid $color-divider;
+}
+
+.infoItem {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.infoLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-xs;
+}
+
+.infoValue {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+}
+
+.sectionTitleBar {
+  width: 8rpx;
+  height: 32rpx;
+  background: linear-gradient(180deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-xs;
+  margin-right: $spacing-sm;
+}
+
+.descText {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  line-height: $line-height-loose;
+}
+
+.remarkBox {
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-top: $spacing-sm;
+}
+
+.remarkLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-xs;
+}
+
+.remarkText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.logList {
+  display: flex;
+  flex-direction: column;
+}
+
+.logItem {
+  display: flex;
+  padding-bottom: $spacing-md;
+  position: relative;
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  &:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 14rpx;
+    top: 40rpx;
+    bottom: 0;
+    width: 2rpx;
+    background: $color-border;
+  }
+}
+
+.logDot {
+  width: 30rpx;
+  height: 30rpx;
+  border-radius: $radius-round;
+  background: $color-primary;
+  margin-right: $spacing-md;
+  margin-top: 4rpx;
+  flex-shrink: 0;
+  border: 4rpx solid $color-bg-card;
+  box-shadow: 0 0 0 2rpx $color-primary;
+  z-index: 1;
+}
+
+.logContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.logHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-xs;
+}
+
+.logOperator {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.logTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.logAction {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  margin-bottom: 4rpx;
+}
+
+.logDetail {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.bottomBar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.actionBtn {
+  @include button-reset;
+  flex: 1;
+  min-width: 45%;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  transition: all $transition-base;
+  border: 2rpx solid transparent;
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+}
+
+.btnSecurity {
+  background: linear-gradient(135deg, $color-security 0%, #9254DE 100%);
+  color: $color-text-white;
+}
+
+.btnGuide {
+  background: linear-gradient(135deg, $color-guide 0%, #36CFC9 100%);
+  color: $color-text-white;
+}
+
+.btnOutline {
+  background: $color-bg-card;
+  color: $color-text-secondary;
+  border-color: $color-border;
+}

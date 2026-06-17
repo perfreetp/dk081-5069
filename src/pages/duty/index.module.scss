@@ -1,0 +1,316 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(22, 119, 255, 0.08) 0%, $color-bg-page 300rpx);
+  padding-bottom: $spacing-lg;
+}
+
+.container {
+  padding: 0 $page-padding;
+}
+
+.dutyCard {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-lg;
+  padding: $spacing-xl $spacing-lg;
+  color: $color-text-white;
+  box-shadow: 0 8rpx 32rpx rgba(22, 119, 255, 0.25);
+  margin-bottom: $spacing-md;
+  margin-top: $spacing-lg;
+}
+
+.dutyHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-lg;
+}
+
+.dutyShift {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  opacity: 0.95;
+}
+
+.dutyDate {
+  font-size: $font-size-sm;
+  opacity: 0.85;
+}
+
+.nurseInfo {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+}
+
+.avatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: $radius-round;
+  background: rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  font-weight: $font-weight-semibold;
+  margin-right: $spacing-md;
+}
+
+.nurseDetail {
+  flex: 1;
+}
+
+.nurseName {
+  font-size: 36rpx;
+  font-weight: $font-weight-bold;
+  margin-bottom: $spacing-xs;
+}
+
+.nurseDept {
+  font-size: $font-size-sm;
+  opacity: 0.85;
+}
+
+.dutyTimes {
+  display: flex;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: $radius-md;
+  padding: $spacing-md;
+}
+
+.timeItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timeValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  margin-bottom: 4rpx;
+}
+
+.timeLabel {
+  font-size: $font-size-xs;
+  opacity: 0.85;
+}
+
+.timeDivider {
+  width: 2rpx;
+  background: rgba(255, 255, 255, 0.25);
+  margin: 0 $spacing-sm;
+}
+
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sectionTitleText {
+  display: flex;
+  align-items: center;
+}
+
+.sectionTitleBar {
+  width: 8rpx;
+  height: 32rpx;
+  background: linear-gradient(180deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-xs;
+  margin-right: $spacing-sm;
+}
+
+.sectionExtra {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  font-weight: $font-weight-normal;
+}
+
+.alertBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40rpx;
+  height: 40rpx;
+  padding: 0 12rpx;
+  border-radius: $radius-round;
+  background: $color-error;
+  color: $color-text-white;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  margin-left: $spacing-sm;
+}
+
+.handoverList {
+  display: flex;
+  flex-direction: column;
+}
+
+.handoverItem {
+  display: flex;
+  align-items: flex-start;
+  padding: $spacing-md 0;
+  border-bottom: 2rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.handoverDot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: $radius-round;
+  background: $color-error;
+  margin-top: 10rpx;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.handoverContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.handoverArea {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.handoverScene {
+  font-size: $font-size-xs;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+  background: $color-bg-tag-blue;
+  color: $color-primary;
+  font-weight: $font-weight-normal;
+}
+
+.handoverMeta {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.whitelistItem {
+  padding: $spacing-md 0;
+  border-bottom: 2rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.whitelistHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-xs;
+}
+
+.whitelistName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.whitelistTag {
+  font-size: $font-size-xs;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+  background: $color-bg-tag-green;
+  color: $color-success;
+}
+
+.whitelistInfo {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: 4rpx;
+}
+
+.whitelistValid {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.empty {
+  padding: $spacing-xl 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.menuList {
+  display: flex;
+  flex-direction: column;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-lg 0;
+  border-bottom: 2rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.menuLeft {
+  display: flex;
+  align-items: center;
+}
+
+.menuIcon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: $radius-md;
+  background: $color-bg-tag-blue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  margin-right: $spacing-md;
+}
+
+.menuText {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.menuArrow {
+  font-size: $font-size-lg;
+  color: $color-text-tertiary;
+}

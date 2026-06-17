@@ -1,0 +1,241 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(22, 119, 255, 0.08) 0%, $color-bg-page 300rpx);
+  padding-bottom: $spacing-lg;
+}
+
+.container {
+  padding: 0 $page-padding;
+}
+
+.header {
+  padding: $spacing-lg 0 $spacing-md;
+}
+
+.title {
+  font-size: 44rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.subtitle {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.overview {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-xs;
+}
+
+.chartCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.chartTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-lg;
+}
+
+.chartContent {
+  min-height: 280rpx;
+}
+
+.chartBars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 240rpx;
+  padding-top: $spacing-lg;
+}
+
+.barItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 4rpx;
+}
+
+.barFill {
+  width: 28rpx;
+  background: linear-gradient(180deg, $color-primary-light 0%, $color-primary 100%);
+  border-radius: $radius-xs $radius-xs 0 0;
+  transition: height $transition-base;
+  min-height: 8rpx;
+}
+
+.barFillPeak {
+  background: linear-gradient(180deg, $color-error 0%, rgba(255, 77, 79, 0.7) 100%);
+}
+
+.barLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-sm;
+}
+
+.areaList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.areaItem {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.areaHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.areaName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.areaTrend {
+  font-size: $font-size-xs;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-sm;
+}
+
+.trendUp {
+  background: $color-bg-tag-red;
+  color: $color-error;
+}
+
+.trendDown {
+  background: $color-bg-tag-green;
+  color: $color-success;
+}
+
+.trendFlat {
+  background: $color-bg-hover;
+  color: $color-text-tertiary;
+}
+
+.areaStats {
+  display: flex;
+  gap: $spacing-lg;
+}
+
+.areaStatItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.areaStatValue {
+  font-size: 40rpx;
+  font-weight: $font-weight-bold;
+  line-height: 1.2;
+}
+
+.areaStatLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.valueToday {
+  color: $color-primary;
+}
+
+.valueUrgent {
+  color: $color-error;
+}
+
+.valueUnresolved {
+  color: $color-warning;
+}
+
+.rankList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.rankItem {
+  display: flex;
+  align-items: center;
+}
+
+.rankIndex {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: $radius-sm;
+  background: $color-bg-hover;
+  color: $color-text-tertiary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.rankIndexTop {
+  background: linear-gradient(135deg, $color-warning 0%, #FFA940 100%);
+  color: $color-text-white;
+}
+
+.rankIndexSecond {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+}
+
+.rankIndexThird {
+  background: linear-gradient(135deg, $color-guide 0%, #36CFC9 100%);
+  color: $color-text-white;
+}
+
+.rankInfo {
+  flex: 1;
+  min-width: 0;
+  margin-right: $spacing-md;
+}
+
+.rankName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.rankBarBg {
+  height: 12rpx;
+  background: $color-bg-hover;
+  border-radius: $radius-round;
+  overflow: hidden;
+}
+
+.rankBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-round;
+}
+
+.rankCount {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  flex-shrink: 0;
+}

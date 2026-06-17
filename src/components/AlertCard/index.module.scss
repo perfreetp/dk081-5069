@@ -1,0 +1,119 @@
+@use '@/styles/variables.scss' as *;
+
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.99);
+    opacity: 0.95;
+  }
+}
+
+.cardUrgent {
+  border-left: 6rpx solid $color-error;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.leftTags {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  flex: 1;
+  margin-right: $spacing-sm;
+}
+
+.tagSpace {
+  width: $spacing-sm;
+  height: 1rpx;
+}
+
+.cardBody {
+  display: flex;
+}
+
+.snapshot {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: $radius-md;
+  flex-shrink: 0;
+  background: $color-bg-hover;
+}
+
+.content {
+  flex: 1;
+  margin-left: $spacing-md;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.area {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+  @include text-ellipsis;
+}
+
+.description {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+  @include text-ellipsis-multi(2);
+  margin-bottom: $spacing-sm;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.metaItem {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.metaDot {
+  margin: 0 $spacing-xs;
+  color: $color-text-tertiary;
+  font-size: $font-size-xs;
+}
+
+.handlerRow,
+.remarkRow {
+  display: flex;
+  align-items: flex-start;
+  margin-top: $spacing-xs;
+}
+
+.handlerLabel,
+.remarkLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  flex-shrink: 0;
+}
+
+.handlerName {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.remarkText {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  flex: 1;
+  @include text-ellipsis;
+}
