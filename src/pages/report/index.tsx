@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { View, Text, Textarea, Switch, Button } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import classnames from 'classnames';
-import { AREA_OPTIONS, SCENE_OPTIONS, AlertLevel } from '@/types';
+import { AREA_OPTIONS, SCENE_OPTIONS, AlertLevel, AlertScene } from '@/types';
+import { useAppStore } from '@/store';
 import styles from './index.module.scss';
 
 const LEVEL_OPTIONS = [
@@ -14,12 +15,20 @@ const LEVEL_OPTIONS = [
 type NotifyType = 'nurse' | 'security' | 'guide';
 
 const ReportPage: React.FC = () => {
+  const addAlert = useAppStore((state) => state.addAlert);
+  const notifySecurityAction = useAppStore((state) => state.notifySecurity);
+  const dispatchGuideAction = useAppStore((state) => state.dispatchGuide);
+
   const [area, setArea] = useState<string>('');
   const [scene, setScene] = useState<string>('');
   const [level, setLevel] = useState<AlertLevel>('normal');
   const [description, setDescription] = useState<string>('');
   const [affectOrder, setAffectOrder] = useState<boolean>(false);
   const [notifies, setNotifies] = useState<NotifyType[]>(['nurse']);
+
+  const areaLabel = useMemo(() => {
+    return AREA_OPTIONS.find((o) => o.value === area)?.label || area;
+  }, [area]);
 
   useEffect(() => {
     console.log('[Report] 协同上报页面加载');
@@ -41,9 +50,9 @@ const ReportPage: React.FC = () => {
   };
 
   const toggleNotify = (type: NotifyType) => {
-    setNotifies(prev => {
+    setNotifies((prev) => {
       if (prev.includes(type)) {
-        return prev.filter(t => t !== type);
+        return prev.filter((t) => t !== type);
       }
       return [...prev, type];
     });
@@ -58,20 +67,49 @@ const ReportPage: React.FC = () => {
       Taro.showToast({ title: '请选择场景', icon: 'none' });
       return;
     }
-    console.log('[Report] 提交上报:', {
-      area, scene, level, description, affectOrder, notifies
-    });
+
+    const notifyDesc: string[] = [];
+    if (notifies.includes('nurse')) notifyDesc.push('护士站');
+    if (notifies.includes('security')) notifyDesc.push('安保队');
+    if (notifies.includes('guide')) notifyDesc.push('导诊台');
+
+    const fullDesc = [
+      description,
+      notifyDesc.length > 0 ? `通知协同方: ${notifyDesc.join('、')}` : ''
+    ].filter(Boolean).join(' | ');
+
     Taro.showLoading({ title: '提交中...' });
+
+    addAlert({
+      area: areaLabel,
+      areaId: area,
+      level,
+      scene: scene as AlertScene,
+      sceneLabel: SCENE_OPTIONS.find((o) => o.value === scene)?.label || scene,
+      description: fullDesc || undefined,
+      affectOrder
+    });
+
     setTimeout(() => {
+      const store = useAppStore.getState();
+      const newAlert = store.alerts[0];
+
+      if (notifies.includes('security') && newAlert) {
+        notifySecurityAction(newAlert.id, '当前护士');
+      }
+      if (notifies.includes('guide') && newAlert) {
+        dispatchGuideAction(newAlert.id, '当前护士');
+      }
+
       Taro.hideLoading();
       Taro.showToast({ title: '上报成功', icon: 'success' });
-      setArea('');
-      setScene('');
-      setLevel('normal');
-      setDescription('');
-      setAffectOrder(false);
-      setNotifies(['nurse']);
-    }, 800);
+
+      handleReset();
+
+      setTimeout(() => {
+        Taro.switchTab({ url: '/pages/messages/index' });
+      }, 500);
+    }, 500);
   };
 
   const handleReset = () => {
@@ -105,7 +143,7 @@ const ReportPage: React.FC = () => {
               发生区域
             </Text>
             <View className={styles.optionGrid}>
-              {AREA_OPTIONS.map(opt => (
+              {AREA_OPTIONS.map((opt) => (
                 <View
                   key={opt.value}
                   className={classnames(
@@ -125,7 +163,7 @@ const ReportPage: React.FC = () => {
               场景类型
             </Text>
             <View className={styles.optionGrid}>
-              {SCENE_OPTIONS.map(opt => (
+              {SCENE_OPTIONS.map((opt) => (
                 <View
                   key={opt.value}
                   className={classnames(
@@ -146,7 +184,7 @@ const ReportPage: React.FC = () => {
           <View className={styles.formSection}>
             <Text className={styles.formLabel}>告警等级</Text>
             <View className={styles.optionGrid}>
-              {LEVEL_OPTIONS.map(opt => (
+              {LEVEL_OPTIONS.map((opt) => (
                 <View
                   key={opt.value}
                   className={classnames(
@@ -168,7 +206,6 @@ const ReportPage: React.FC = () => {
               <Textarea
                 className={styles.textarea}
                 placeholder="请输入现场情况描述（选填）"
-                placeholderClass={styles.placeholder}
                 value={description}
                 onInput={(e) => setDescription(e.detail.value)}
                 maxlength={200}

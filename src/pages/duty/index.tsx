@@ -1,18 +1,32 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { View, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro';
-import { mockDutyInfo, mockWhitelist, mockHandoverAlerts } from '@/data/duty';
+import { mockDutyInfo } from '@/data/duty';
+import { useAppStore } from '@/store';
 import { formatDuration, formatTime, formatDateTime } from '@/utils';
 import styles from './index.module.scss';
 
 const DutyPage: React.FC = () => {
   const duty = mockDutyInfo;
-  const whitelist = mockWhitelist;
-  const handoverAlerts = mockHandoverAlerts;
+  const alerts = useAppStore((state) => state.alerts);
+  const whitelist = useAppStore((state) => state.whitelist);
+
+  const handoverAlerts = useMemo(() => {
+    return alerts
+      .filter((a) => a.status !== 'resolved')
+      .map((a) => ({
+        id: a.id,
+        area: a.area,
+        scene: a.sceneLabel,
+        occurTime: a.occurTime,
+        duration: a.duration,
+        handler: a.handler || '-'
+      }));
+  }, [alerts]);
 
   useEffect(() => {
-    console.log('[Duty] 值班设置页面加载，值班护士:', duty.nurseName);
-  }, []);
+    console.log('[Duty] 值班设置页面加载，未消除告警数:', handoverAlerts.length);
+  }, [handoverAlerts.length]);
 
   const goWhitelist = () => {
     Taro.navigateTo({ url: '/pages/whitelist/index' });
@@ -82,7 +96,7 @@ const DutyPage: React.FC = () => {
           </View>
           {handoverAlerts.length > 0 ? (
             <View className={styles.handoverList}>
-              {handoverAlerts.map(alert => (
+              {handoverAlerts.map((alert) => (
                 <View
                   key={alert.id}
                   className={styles.handoverItem}
@@ -126,7 +140,7 @@ const DutyPage: React.FC = () => {
           </View>
           {whitelist.length > 0 ? (
             <View>
-              {whitelist.slice(0, 3).map(item => (
+              {whitelist.slice(0, 3).map((item) => (
                 <View key={item.id} className={styles.whitelistItem}>
                   <View className={styles.whitelistHeader}>
                     <Text className={styles.whitelistName}>{item.name}</Text>

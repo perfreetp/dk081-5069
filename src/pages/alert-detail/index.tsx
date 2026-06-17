@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, Image, Button } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
 import classnames from 'classnames';
 import Tag from '@/components/Tag';
-import { AlertItem, AlertLevel, AlertScene } from '@/types';
-import { mockAlerts } from '@/data/alerts';
+import { AlertLevel, AlertScene } from '@/types';
 import { formatDuration, formatTime, formatDateTime, getLevelLabel } from '@/utils';
+import { useAppStore } from '@/store';
 import styles from './index.module.scss';
+
+const OPERATOR = '当前护士';
 
 const getLevelColor = (level: AlertLevel): 'urgent' | 'warning' | 'primary' => {
   if (level === 'urgent') return 'urgent';
@@ -26,14 +28,19 @@ const getSceneColor = (scene: AlertScene): 'primary' | 'warning' | 'urgent' | 'p
 
 const AlertDetailPage: React.FC = () => {
   const router = useRouter();
-  const alertId = router.params.id || mockAlerts[0].id;
-  const [alert, setAlert] = useState<AlertItem | null>(null);
+  const alertId = router.params.id;
 
-  useEffect(() => {
-    const found = mockAlerts.find(a => a.id === alertId) || mockAlerts[0];
-    setAlert(found);
-    console.log('[AlertDetail] 加载告警详情:', found?.id);
-  }, [alertId]);
+  const alerts = useAppStore((state) => state.alerts);
+  const addRemark = useAppStore((state) => state.addRemark);
+  const notifySecurity = useAppStore((state) => state.notifySecurity);
+  const dispatchGuide = useAppStore((state) => state.dispatchGuide);
+  const setWhitelistOnAlert = useAppStore((state) => state.setWhitelistOnAlert);
+  const markResolved = useAppStore((state) => state.markResolved);
+
+  const alert = useMemo(() => {
+    const found = alerts.find((a) => a.id === alertId);
+    return found || (alerts.length > 0 ? alerts[0] : null);
+  }, [alerts, alertId]);
 
   const statusClass = useMemo(() => {
     if (!alert) return '';
@@ -50,18 +57,20 @@ const AlertDetailPage: React.FC = () => {
   }, [alert]);
 
   const handleNotifySecurity = () => {
-    console.log('[AlertDetail] 通知安保');
+    if (!alert) return;
+    notifySecurity(alert.id, OPERATOR);
     Taro.showToast({ title: '已通知安保队', icon: 'success' });
   };
 
   const handleAddRemark = () => {
-    console.log('[AlertDetail] 补充说明');
+    if (!alert) return;
     Taro.showModal({
       title: '补充临时说明',
       editable: true,
       placeholderText: '例如：已安抚，允许等待至17:30',
       success: (res) => {
         if (res.confirm && res.content) {
+          addRemark(alert.id, res.content, OPERATOR);
           Taro.showToast({ title: '已添加说明', icon: 'success' });
         }
       }
@@ -69,19 +78,22 @@ const AlertDetailPage: React.FC = () => {
   };
 
   const handleDispatchGuide = () => {
-    console.log('[AlertDetail] 转派导诊台');
+    if (!alert) return;
+    dispatchGuide(alert.id, OPERATOR);
     Taro.showToast({ title: '已转派导诊台疏导', icon: 'success' });
   };
 
   const handleSetWhitelist = () => {
-    console.log('[AlertDetail] 设置白名单');
-    Taro.navigateTo({ url: '/pages/whitelist/index?from=alert' });
+    if (!alert) return;
+    setWhitelistOnAlert(alert.id, OPERATOR);
+    Taro.showToast({ title: '已加入短时白名单', icon: 'success' });
   };
 
   const handleMarkResolved = () => {
-    console.log('[AlertDetail] 标记已处理');
+    if (!alert) return;
+    markResolved(alert.id, OPERATOR);
     Taro.showToast({ title: '已标记处理完成', icon: 'success' });
-    setTimeout(() => Taro.navigateBack(), 800);
+    setTimeout(() => Taro.navigateBack(), 600);
   };
 
   if (!alert) {

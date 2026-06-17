@@ -3,7 +3,7 @@ import { View, Text, Button, Input, Textarea } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import classnames from 'classnames';
 import { WhitelistItem, AREA_OPTIONS } from '@/types';
-import { mockWhitelist } from '@/data/duty';
+import { useAppStore } from '@/store';
 import { formatDateTime, formatTime } from '@/utils';
 import styles from './index.module.scss';
 
@@ -16,7 +16,11 @@ interface FormData {
 }
 
 const WhitelistPage: React.FC = () => {
-  const [list, setList] = useState<WhitelistItem[]>(mockWhitelist);
+  const whitelist = useAppStore((state) => state.whitelist);
+  const addWhitelistItem = useAppStore((state) => state.addWhitelistItem);
+  const updateWhitelistItem = useAppStore((state) => state.updateWhitelistItem);
+  const deleteWhitelistItem = useAppStore((state) => state.deleteWhitelistItem);
+
   const [showModal, setShowModal] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<FormData>({
@@ -28,8 +32,8 @@ const WhitelistPage: React.FC = () => {
   });
 
   useEffect(() => {
-    console.log('[Whitelist] 白名单管理页面加载，条目数:', list.length);
-  }, []);
+    console.log('[Whitelist] 白名单管理页面加载，条目数:', whitelist.length);
+  }, [whitelist]);
 
   const isExpired = (item: WhitelistItem): boolean => {
     return new Date(item.validUntil) < new Date();
@@ -59,7 +63,7 @@ const WhitelistPage: React.FC = () => {
       content: '确定要删除该白名单条目吗？',
       success: (res) => {
         if (res.confirm) {
-          setList(prev => prev.filter(i => i.id !== id));
+          deleteWhitelistItem(id);
           Taro.showToast({ title: '已删除', icon: 'success' });
           console.log('[Whitelist] 删除白名单:', id);
         }
@@ -90,27 +94,25 @@ const WhitelistPage: React.FC = () => {
     const validUntil = new Date(now.getTime() + hours * 60 * 60 * 1000).toISOString();
 
     if (editingId) {
-      setList(prev => prev.map(item =>
-        item.id === editingId
-          ? { ...item, ...form, validUntil }
-          : item
-      ));
-      Taro.showToast({ title: '修改成功', icon: 'success' });
-      console.log('[Whitelist] 修改白名单:', editingId);
-    } else {
-      const newItem: WhitelistItem = {
-        id: `W${Date.now()}`,
+      updateWhitelistItem(editingId, {
         name: form.name,
         patientName: form.patientName,
         area: form.area,
         reason: form.reason,
-        validFrom: now.toISOString(),
-        validUntil,
-        operator: '当前护士'
-      };
-      setList(prev => [newItem, ...prev]);
+        validUntil
+      });
+      Taro.showToast({ title: '修改成功', icon: 'success' });
+      console.log('[Whitelist] 修改白名单:', editingId);
+    } else {
+      addWhitelistItem({
+        name: form.name,
+        patientName: form.patientName,
+        area: form.area,
+        reason: form.reason,
+        validUntil
+      });
       Taro.showToast({ title: '添加成功', icon: 'success' });
-      console.log('[Whitelist] 新增白名单:', newItem.id);
+      console.log('[Whitelist] 新增白名单');
     }
 
     setShowModal(false);
@@ -118,9 +120,9 @@ const WhitelistPage: React.FC = () => {
 
   const handleAreaSelect = () => {
     Taro.showActionSheet({
-      itemList: AREA_OPTIONS.map(o => o.label),
+      itemList: AREA_OPTIONS.map((o) => o.label),
       success: (res) => {
-        setForm(prev => ({ ...prev, area: AREA_OPTIONS[res.tapIndex].label }));
+        setForm((prev) => ({ ...prev, area: AREA_OPTIONS[res.tapIndex].label }));
       }
     });
   };
@@ -134,9 +136,9 @@ const WhitelistPage: React.FC = () => {
         </View>
 
         <View className={styles.card}>
-          {list.length > 0 ? (
+          {whitelist.length > 0 ? (
             <View>
-              {list.map(item => (
+              {whitelist.map((item) => (
                 <View key={item.id} className={styles.listItem}>
                   <View className={styles.itemHeader}>
                     <Text className={styles.itemName}>{item.name}</Text>
@@ -223,7 +225,7 @@ const WhitelistPage: React.FC = () => {
                   className={styles.input}
                   placeholder="请输入家属姓名"
                   value={form.name}
-                  onInput={(e) => setForm(prev => ({ ...prev, name: e.detail.value }))}
+                  onInput={(e) => setForm((prev) => ({ ...prev, name: e.detail.value }))}
                 />
               </View>
             </View>
@@ -235,7 +237,7 @@ const WhitelistPage: React.FC = () => {
                   className={styles.input}
                   placeholder="请输入对应患者姓名"
                   value={form.patientName}
-                  onInput={(e) => setForm(prev => ({ ...prev, patientName: e.detail.value }))}
+                  onInput={(e) => setForm((prev) => ({ ...prev, patientName: e.detail.value }))}
                 />
               </View>
             </View>
@@ -260,7 +262,7 @@ const WhitelistPage: React.FC = () => {
                   type="number"
                   placeholder="请输入有效时长"
                   value={form.validHours}
-                  onInput={(e) => setForm(prev => ({ ...prev, validHours: e.detail.value }))}
+                  onInput={(e) => setForm((prev) => ({ ...prev, validHours: e.detail.value }))}
                 />
               </View>
             </View>
@@ -272,7 +274,7 @@ const WhitelistPage: React.FC = () => {
                   className={styles.textarea}
                   placeholder="请输入设置原因，如：术后家属等待、特殊情况等"
                   value={form.reason}
-                  onInput={(e) => setForm(prev => ({ ...prev, reason: e.detail.value }))}
+                  onInput={(e) => setForm((prev) => ({ ...prev, reason: e.detail.value }))}
                   maxlength={200}
                 />
               </View>

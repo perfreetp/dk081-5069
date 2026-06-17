@@ -4,8 +4,7 @@ import Taro from '@tarojs/taro';
 import classnames from 'classnames';
 import StatCard from '@/components/StatCard';
 import AlertCard from '@/components/AlertCard';
-import { AlertItem, AlertStatus } from '@/types';
-import { mockAlerts } from '@/data/alerts';
+import { useAppStore } from '@/store';
 import styles from './index.module.scss';
 
 type FilterType = 'all' | 'pending' | 'processing' | 'resolved' | 'urgent';
@@ -24,28 +23,28 @@ const FILTER_OPTIONS: FilterOption[] = [
 ];
 
 const MessagesPage: React.FC = () => {
-  const [alerts, setAlerts] = useState<AlertItem[]>(mockAlerts);
+  const alerts = useAppStore((state) => state.alerts);
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
 
   const stats = useMemo(() => {
     return {
       total: alerts.length,
-      pending: alerts.filter(a => a.status === 'pending').length,
-      urgent: alerts.filter(a => a.level === 'urgent').length,
-      resolved: alerts.filter(a => a.status === 'resolved').length
+      pending: alerts.filter((a) => a.status === 'pending').length,
+      urgent: alerts.filter((a) => a.level === 'urgent').length,
+      resolved: alerts.filter((a) => a.status === 'resolved').length
     };
   }, [alerts]);
 
   const filteredAlerts = useMemo(() => {
     switch (activeFilter) {
       case 'pending':
-        return alerts.filter(a => a.status === 'pending');
+        return alerts.filter((a) => a.status === 'pending');
       case 'processing':
-        return alerts.filter(a => a.status === 'processing');
+        return alerts.filter((a) => a.status === 'processing');
       case 'urgent':
-        return alerts.filter(a => a.level === 'urgent');
+        return alerts.filter((a) => a.level === 'urgent');
       case 'resolved':
-        return alerts.filter(a => a.status === 'resolved');
+        return alerts.filter((a) => a.status === 'resolved');
       default:
         return alerts;
     }
@@ -53,7 +52,7 @@ const MessagesPage: React.FC = () => {
 
   useEffect(() => {
     console.log('[Messages] 页面加载完成，告警数量:', alerts.length);
-  }, []);
+  }, [alerts]);
 
   const handleFilterClick = (key: FilterType) => {
     setActiveFilter(key);
@@ -63,10 +62,9 @@ const MessagesPage: React.FC = () => {
   const onRefresh = () => {
     console.log('[Messages] 下拉刷新');
     setTimeout(() => {
-      setAlerts([...mockAlerts]);
       Taro.stopPullDownRefresh();
       Taro.showToast({ title: '刷新成功', icon: 'success' });
-    }, 800);
+    }, 500);
   };
 
   useEffect(() => {
@@ -92,7 +90,7 @@ const MessagesPage: React.FC = () => {
         </View>
 
         <ScrollView scrollX className={styles.filterBar}>
-          {FILTER_OPTIONS.map(opt => (
+          {FILTER_OPTIONS.map((opt) => (
             <View
               key={opt.key}
               className={classnames(
@@ -108,7 +106,7 @@ const MessagesPage: React.FC = () => {
 
         <View className={styles.alertList}>
           {filteredAlerts.length > 0 ? (
-            filteredAlerts.map(alert => (
+            filteredAlerts.map((alert) => (
               <AlertCard key={alert.id} alert={alert} />
             ))
           ) : (
